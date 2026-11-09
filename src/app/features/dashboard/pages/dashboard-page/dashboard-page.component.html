@@ -1,0 +1,102 @@
+<h1>Dashboard</h1>
+
+<section class="hero" *ngIf="activeUser$ | async as user">
+  <span class="hero-orb hero-orb-a" aria-hidden="true"></span>
+  <span class="hero-orb hero-orb-b" aria-hidden="true"></span>
+  <div class="hero-text">
+    <p class="hero-eyebrow">{{ today | date: 'EEEE, d MMMM' }}</p>
+    <h2 class="hero-title">{{ greeting }}, {{ user.name }}<span class="wave" aria-hidden="true"> 👋</span></h2>
+    <p class="hero-sub">
+      {{ isAdmin ? 'Here is how learning is going across your team.' : 'Pick up where you left off and keep your streak going.' }}
+    </p>
+  </div>
+  <div class="hero-ring" *ngIf="snapshot.assigned > 0" [style.--pct]="completionPercent"
+       role="img" [attr.aria-label]="completionPercent + ' percent of assigned items completed'">
+    <span class="hero-ring-value">{{ completionPercent }}%</span>
+    <span class="hero-ring-label">done</span>
+  </div>
+</section>
+
+<div class="snapshot-cards stagger">
+  <ion-card class="snapshot-card tone-assigned lift" button routerLink="/my-learning" [queryParams]="{ tab: 'assigned' }" aria-label="View assigned items">
+    <ion-card-content>
+      <span class="icon-badge" aria-hidden="true"><ion-icon name="clipboard-outline"></ion-icon></span>
+      <div class="count" [appCountUp]="snapshot.assigned">0</div>
+      <div class="label">Assigned</div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="snapshot-card tone-progress lift" button routerLink="/my-learning" [queryParams]="{ tab: 'in-progress' }" aria-label="View items in progress">
+    <ion-card-content>
+      <span class="icon-badge" aria-hidden="true"><ion-icon name="hourglass-outline"></ion-icon></span>
+      <div class="count" [appCountUp]="snapshot.inProgress">0</div>
+      <div class="label">In progress</div>
+    </ion-card-content>
+  </ion-card>
+  <ion-card class="snapshot-card tone-done lift" button routerLink="/my-learning" [queryParams]="{ tab: 'completed' }" aria-label="View completed items">
+    <ion-card-content>
+      <span class="icon-badge" aria-hidden="true"><ion-icon name="checkmark-done-outline"></ion-icon></span>
+      <div class="count" [appCountUp]="snapshot.completed">0</div>
+      <div class="label">Completed</div>
+    </ion-card-content>
+  </ion-card>
+</div>
+
+<div class="grid-two">
+  <app-milestone-list
+    [milestones]="(milestones$ | async) ?? []"
+  ></app-milestone-list>
+
+  <!-- Admin sees participation metrics; everyone else sees quick links. -->
+  <ion-card *ngIf="isAdmin; else quickLinks">
+    <ion-card-header>
+      <ion-card-title>Participation (Admin)</ion-card-title>
+      <a class="card-link" routerLink="/admin/reports">
+        View full reports <ion-icon name="arrow-forward-outline" aria-hidden="true"></ion-icon>
+      </a>
+    </ion-card-header>
+    <ion-card-content>
+      <p class="total">
+        Total completed items across participants: <strong>{{ totalCompleted }}</strong>
+      </p>
+      <ion-list lines="full" class="stagger">
+        <ion-item *ngFor="let r of adminReports">
+          <span slot="start" class="avatar" aria-hidden="true">{{ initials(r.user.name) }}</span>
+          <ion-label>
+            <h3>{{ r.user.name }}</h3>
+            <p>
+              {{ r.videosCompleted }} videos · {{ r.quizzesPassed }} quizzes ·
+              {{ r.pathsCompleted }} paths
+            </p>
+            <div class="bar" aria-hidden="true">
+              <span [style.width.%]="barPercent(r)"></span>
+            </div>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ng-template #quickLinks>
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Quick links</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="full" class="quick-links stagger">
+          <ion-item button routerLink="/catalogue" detail="true">
+            <ion-icon slot="start" name="videocam-outline"></ion-icon>
+            <ion-label>Browse the catalogue</ion-label>
+          </ion-item>
+          <ion-item button routerLink="/my-learning" detail="true">
+            <ion-icon slot="start" name="school-outline"></ion-icon>
+            <ion-label>Continue my learning</ion-label>
+          </ion-item>
+          <ion-item button routerLink="/learning-paths" detail="true">
+            <ion-icon slot="start" name="git-branch-outline"></ion-icon>
+            <ion-label>Explore learning paths</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+</div>

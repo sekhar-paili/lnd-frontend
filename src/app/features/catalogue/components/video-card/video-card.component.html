@@ -1,0 +1,15 @@
+<ion-card class="video-card" button [routerLink]="['/player', video.id]">
+  <div class="thumb">
+    <ion-icon name="play-circle-outline"></ion-icon>
+  </div>
+  <ion-card-header>
+    <ion-card-title class="title">{{ video.title }}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <p class="desc">{{ video.description }}</p>
+    <div class="meta">
+      <app-status-badge [label]="categoryName" tone="info"></app-status-badge>
+      <span class="duration">{{ video.durationSeconds | duration }}</span>
+    </div>
+  </ion-card-content>
+</ion-card>

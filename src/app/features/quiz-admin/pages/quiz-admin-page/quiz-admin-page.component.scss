@@ -1,0 +1,81 @@
+/* Builder is the wide column, quiz list the narrow one. */
+.quiz-admin-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--space-lg);
+  align-items: stretch;
+}
+
+.quiz-form {
+  display: flex;
+  flex-direction: column;
+
+  .pass-mark {
+    max-width: 240px;
+  }
+}
+
+.question {
+  padding: var(--space-sm) 0;
+
+  .question-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-sm);
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+  }
+
+  .option-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+
+    .option-field {
+      flex: 1 1 auto;
+    }
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--ion-color-step-150, #e0e0e0);
+    margin: var(--space-md) 0;
+  }
+}
+
+.field-label {
+  display: block;
+  color: var(--ion-color-medium, #555);
+  font-size: 13px;
+  margin: var(--space-sm) 0 var(--space-xs);
+}
+
+.field-error {
+  color: var(--ion-color-danger);
+  font-size: 12px;
+  margin: 2px 0 var(--space-sm) var(--space-md);
+}
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.quiz-row .row-actions {
+  margin-left: auto;
+  display: flex;
+  gap: var(--space-xs);
+}
+
+@media (max-width: 899px) {
+  .quiz-admin-grid {
+    grid-template-columns: 1fr;
+  }
+}

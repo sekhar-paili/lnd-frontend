@@ -1,0 +1,204 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+ion-card {
+  margin: 0;
+  height: 100%;
+}
+
+/* Ionic reverses card headers (subtitle above title); keep natural order. */
+ion-card-header {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.overall {
+  align-self: stretch;
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--ion-color-primary, #15803d);
+  text-decoration: none;
+
+  ion-icon {
+    transition: transform var(--dur-med) var(--ease-spring);
+  }
+
+  &:hover ion-icon {
+    transform: translateX(4px);
+  }
+}
+
+ion-card-header {
+  gap: 4px;
+  padding-bottom: var(--space-md);
+}
+
+ion-card-content {
+  color: var(--ion-text-color, #1f2937);
+}
+
+.summary {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--ion-color-medium, #777);
+}
+
+.overall {
+  height: 6px;
+  margin-top: var(--space-sm);
+  border-radius: 3px;
+  background: #e6efe9;
+  overflow: hidden;
+
+  span {
+    display: block;
+    height: 100%;
+    border-radius: 3px;
+    background: var(--lnd-gradient);
+    transform-origin: left;
+    animation: lnd-grow 1s var(--ease-out) 0.3s backwards;
+  }
+}
+
+/* Vertical timeline: a rail with one dot per milestone. */
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.step {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: 0 0 var(--space-md);
+  --dot: 34px;
+  --tone: #9aa5b1;
+
+  /* Rail connecting this dot to the next. */
+  &:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: calc(var(--dot) / 2 - 1px);
+    top: var(--dot);
+    bottom: 0;
+    width: 2px;
+    background: #dfe6e2;
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+
+  &.done {
+    --tone: #15803d;
+
+    &:not(:last-child)::before {
+      background: var(--tone);
+    }
+  }
+
+  &.active {
+    --tone: #e65100;
+  }
+}
+
+.dot {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: 50%;
+  color: var(--tone);
+  background: #fff;
+  border: 2px solid var(--tone);
+  transition: transform var(--dur-med) var(--ease-spring);
+
+  ion-icon {
+    font-size: 16px;
+  }
+}
+
+.done .dot {
+  color: #fff;
+  background: var(--tone);
+}
+
+/* In-progress dot pulses; the icon turns slowly. */
+.active .dot {
+  animation: milestone-pulse 2s ease-out infinite;
+
+  ion-icon {
+    animation: milestone-spin 3s linear infinite;
+  }
+}
+
+/* Small orange ring so it never reaches the neighbouring steps. */
+@keyframes milestone-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(230, 81, 0, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 0 7px rgba(230, 81, 0, 0);
+  }
+}
+
+@keyframes milestone-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+
+  h3 {
+    margin: 0;
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+
+  h3 {
+    color: var(--ion-text-color, #1f2937);
+    line-height: 1.3;
+  }
+
+  .date {
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 2px 0 0;
+    font-size: var(--fs-xs);
+    color: var(--ion-color-medium, #777);
+  }
+}
+
+@media (hover: hover) {
+  .step:hover .dot {
+    transform: scale(1.15);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .active .dot,
+  .active .dot ion-icon {
+    animation: none;
+  }
+}

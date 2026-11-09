@@ -1,0 +1,6 @@
+<ion-searchbar
+  [placeholder]="placeholder"
+  [value]="value"
+  [debounce]="200"
+  (ionInput)="onInput($any($event.target).value)"
+></ion-searchbar>

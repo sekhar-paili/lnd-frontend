@@ -1,0 +1,33 @@
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.player {
+  width: 100%;
+  max-height: 480px;
+  background: #000;
+  border-radius: 8px;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 12px 0;
+
+  ion-progress-bar {
+    flex: 1 1 auto;
+  }
+
+  .progress-label {
+    font-size: 13px;
+    color: var(--ion-color-medium, #666);
+    white-space: nowrap;
+  }
+}
+
+.desc {
+  color: var(--ion-color-medium, #555);
+}

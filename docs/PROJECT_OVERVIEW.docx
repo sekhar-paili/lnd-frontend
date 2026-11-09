@@ -1,0 +1,202 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+  <head>
+    <meta charset="utf-8" />
+    <title>LND Platform — Project &amp; Architecture Overview</title>
+    <!--[if gte mso 9]>
+    <xml>
+      <w:WordDocument>
+        <w:View>Print</w:View>
+        <w:Zoom>100</w:Zoom>
+      </w:WordDocument>
+    </xml>
+    <![endif]-->
+    <style>
+      body { font-family: Calibri, "Segoe UI", Arial, sans-serif; color: #1f2933; font-size: 11pt; line-height: 1.4; }
+      h1 { color: #0f6b52; font-size: 20pt; margin-bottom: 2pt; }
+      .sub { color: #15803d; font-size: 12pt; }
+      .meta { color: #667085; font-size: 9pt; margin-bottom: 14pt; }
+      h2 { color: #15803d; border-bottom: 1.5pt solid #15803d; padding-bottom: 2pt; font-size: 14pt; margin-top: 20pt; }
+      h3 { color: #0f6b52; font-size: 11.5pt; margin-top: 12pt; }
+      table { border-collapse: collapse; width: 100%; margin: 8pt 0; }
+      th, td { border: 0.75pt solid #c9ced6; padding: 5pt 7pt; text-align: left; vertical-align: top; font-size: 10pt; }
+      th { background: #eef7f0; color: #0f6b52; }
+      pre { background: #f5f7fa; border: 0.75pt solid #e4e7ec; padding: 8pt; font-family: Consolas, monospace; font-size: 9.5pt; white-space: pre-wrap; }
+      code { font-family: Consolas, monospace; background: #f5f7fa; font-size: 9.5pt; }
+      .callout { border-left: 3pt solid #15803d; background: #f3faf5; padding: 7pt 10pt; margin: 10pt 0; }
+      .warn { border-left-color: #c0392b; background: #fdf1f0; }
+      .footer { margin-top: 24pt; padding-top: 8pt; border-top: 0.75pt solid #e4e7ec; color: #667085; font-size: 8.5pt; }
+    </style>
+  </head>
+  <body>
+    <h1>LND Learning &amp; Development Platform</h1>
+    <div class="sub">Project &amp; Architecture Overview</div>
+    <div class="meta">
+      Audience: Management · Engineering Management · Development Team<br />
+      Phase: Proof of Concept &nbsp;|&nbsp; Status: Build green, 52/52 tests passing, web demo runnable &nbsp;|&nbsp; 2026-10-28
+    </div>
+
+    <h2>1. Executive summary</h2>
+    <p>The LND Learning &amp; Development Platform is a proof of concept for an internal training portal. It lets an organization publish training videos, organize them into learning paths, assign training to audiences, assess learners with quizzes, and track completion — for three kinds of users: <b>L&amp;D Admin</b>, <b>Employee</b>, and <b>Partner</b>.</p>
+    <p>This phase deliberately has <b>no backend and no database</b>. It runs entirely in the browser using bundled sample data and the browser's local storage. The purpose is to validate the product experience, information architecture, and UI direction quickly and cheaply, before committing to backend, infrastructure, and integration spend.</p>
+    <h3>What this delivers today</h3>
+    <ul>
+      <li>A working, demo-able application covering all twelve target capabilities.</li>
+      <li>A login screen with three demo roles and role-appropriate access.</li>
+      <li>A mobile-first interface in the Safexpress visual identity, buildable toward a native Android app via Capacitor.</li>
+      <li>A clean, documented, test-backed codebase that a team can extend.</li>
+    </ul>
+    <h3>What this is not (by design, this phase)</h3>
+    <ul>
+      <li>Not connected to any real system (no SSO, Slack, vendor apps, or AWS).</li>
+      <li>Not using real authentication — the login is a demo gate, not secure sign-in.</li>
+      <li>Not persisting data on a server — all state is local to the browser/device.</li>
+    </ul>
+    <div class="callout"><b>Headline recommendation:</b> the POC is suitable for stakeholder demos and user feedback now. Converting it into a production system is a well-understood next phase (backend, real auth, real data), and the current architecture was built to make that transition straightforward rather than a rewrite.</div>
+
+    <h2>2. Objectives and scope</h2>
+    <h3>2.1 Business objectives</h3>
+    <ul>
+      <li>Demonstrate the end-to-end L&amp;D journey (discover → learn → assess → track) without backend investment.</li>
+      <li>Provide a tangible artifact for stakeholder feedback and go/no-go decisions.</li>
+      <li>De-risk the UI, navigation, and role model before production build-out.</li>
+    </ul>
+    <h3>2.2 In scope (this phase)</h3>
+    <ul>
+      <li>Dashboard with project milestones and a personal learning snapshot.</li>
+      <li>Video catalogue with search, filtering, and categories.</li>
+      <li>Video metadata management for L&amp;D admins (create/edit/delete).</li>
+      <li>Video playback with progress tracking and resume.</li>
+      <li>Training assignments targeted at a simulated audience (role, group, individual).</li>
+      <li>My Learning page (assigned / in-progress / completed).</li>
+      <li>Quizzes: multiple choice and true/false, with configurable pass marks.</li>
+      <li>Learning paths where later steps unlock after earlier assessments are passed.</li>
+      <li>Participant history and completion reports (admin).</li>
+      <li>Feedback capture on videos and paths.</li>
+      <li>Demo login with three roles and role-based access.</li>
+      <li>Responsive, mobile-first interface; Android-ready via Capacitor.</li>
+    </ul>
+    <h3>2.3 Explicitly out of scope (this phase)</h3>
+    <ul>
+      <li>Real database or persistence server.</li>
+      <li>Backend API and business logic on the server.</li>
+      <li>Real identity provider / SSO, Slack, or third-party vendor integration.</li>
+      <li>Any requirement for AWS credentials to run the demo.</li>
+    </ul>
+
+    <h2>3. Solution architecture</h2>
+    <h3>3.1 Architectural style</h3>
+    <p>A <b>single-page application (SPA)</b> built with <b>Angular 17</b> using the classic, strict <b>NgModule</b> architecture (no standalone components). UI is built with <b>Ionic 7</b> components and themed with SCSS/CSS variables. <b>Capacitor 6</b> wraps the web build for native packaging (Android configured). The app is fully client-side: seed data loads from bundled JSON fixtures, and all mutable demo state is stored in the browser's <code>localStorage</code>. There is no network dependency to run the demo.</p>
+    <h3>3.2 Module structure</h3>
+    <pre>AppModule (bootstrap, IonicModule.forRoot, APP_INITIALIZER)
++-- AppRoutingModule      Root routes, lazy loading, route guards
++-- CoreModule            Singleton services, guards, domain models (imported once)
++-- SharedModule          Reusable UI components + pipes; re-exports IonicModule
++-- LayoutModule          App shell: header, collapsible sidenav, footer, user menu
++-- Feature modules (lazy-loaded, each with its own routing module)
+    +-- AuthModule          Login page (public, outside the shell)
+    +-- DashboardModule     Dashboard + milestones
+    +-- CatalogueModule     Catalogue, search, categories
+    +-- VideoAdminModule    Video metadata CRUD (admin-only)
+    +-- PlayerModule        Playback + progress tracking
+    +-- AssignmentsModule   Assignments by audience (admin-only)
+    +-- MyLearningModule    Personal learning aggregation
+    +-- QuizModule          Take quizzes (MCQ, true/false)
+    +-- QuizAdminModule     Quiz builder (admin-only)
+    +-- LearningPathsModule Paths with assessment-gated unlocking
+    +-- ReportsModule       Participant history + reports (admin-only)
+    +-- FeedbackModule      Feedback capture and averages</pre>
+    <p><b>Design rules enforced:</b> singletons only in CoreModule (guarded against double-import); SharedModule holds only reusable, stateless UI; feature modules never import each other and communicate through Core services; every feature is lazy-loaded (confirmed by the build emitting one chunk per feature).</p>
+    <h3>3.3 Core services</h3>
+    <table>
+      <tr><th>Service</th><th>Responsibility</th></tr>
+      <tr><td>StorageService</td><td>Typed, namespaced localStorage access + reset</td></tr>
+      <tr><td>MockDataService</td><td>Loads and caches JSON fixtures</td></tr>
+      <tr><td>AuthService</td><td>Demo login/logout, session persistence and restore</td></tr>
+      <tr><td>RoleService</td><td>Active user/role state (fixed to the signed-in account)</td></tr>
+      <tr><td>VideoService</td><td>Catalogue + admin CRUD (fixtures merged with stored edits)</td></tr>
+      <tr><td>ProgressService</td><td>Per-user playback position, percent, completion (90% threshold)</td></tr>
+      <tr><td>QuizService</td><td>Scoring (MCQ/true-false), pass marks, attempts, quiz CRUD</td></tr>
+      <tr><td>LearningPathService</td><td>Step lock/unlock logic from progress + attempts</td></tr>
+      <tr><td>AssignmentService</td><td>Audience resolution (role/group/individual)</td></tr>
+      <tr><td>FeedbackService</td><td>Submit, list, average rating</td></tr>
+      <tr><td>ReportService</td><td>Completion and attempt reports; dashboard snapshot</td></tr>
+      <tr><td>AppStateService</td><td>Initializes all services at startup; demo reset</td></tr>
+    </table>
+    <h3>3.4 Routing, guards, and access control</h3>
+    <ul>
+      <li><b>AuthGuard</b> protects the entire authenticated area; unauthenticated users are redirected to <code>/login</code>.</li>
+      <li><b>RoleGuard</b> restricts <code>/admin/*</code> routes to L&amp;D Admin — enforced by navigation and direct URL.</li>
+      <li>The shell wraps all guarded routes; <code>/login</code> renders outside the shell.</li>
+      <li>Role is <b>fixed to the logged-in account</b> — no in-app role switching. To change role, sign out and sign in as another user.</li>
+    </ul>
+
+    <h2>4. Technology stack</h2>
+    <table>
+      <tr><th>Layer</th><th>Choice</th><th>Version</th><th>Notes</th></tr>
+      <tr><td>Framework</td><td>Angular</td><td>17</td><td>Strict NgModule, no standalone</td></tr>
+      <tr><td>Language</td><td>TypeScript</td><td>5.4 (strict)</td><td>No <code>any</code> in domain code</td></tr>
+      <tr><td>UI</td><td>Ionic Framework</td><td>7</td><td>NgModule mode (IonicModule.forRoot)</td></tr>
+      <tr><td>Icons</td><td>Ionicons</td><td>7</td><td>Bundled as assets</td></tr>
+      <tr><td>Reactive</td><td>RxJS</td><td>7.8</td><td>BehaviorSubject-backed state</td></tr>
+      <tr><td>Styling</td><td>SCSS + CSS variables</td><td>—</td><td>Safexpress green gradient theme</td></tr>
+      <tr><td>Native shell</td><td>Capacitor</td><td>6</td><td>Android target configured</td></tr>
+      <tr><td>Unit tests</td><td>Jasmine + Karma</td><td>5 / 6.4</td><td>Headless Chrome</td></tr>
+    </table>
+    <p>Compatibility: Ionic 7 supports Angular 14+, so Angular 17 with NgModule is fully supported. Capacitor 6 works with the Angular 17 toolchain.</p>
+
+    <h2>5. Security and data posture</h2>
+    <div class="callout warn">
+      This is a <b>demo build</b>. The following are deliberate POC limitations and <b>must not be carried into production as-is</b>:
+      <ul>
+        <li><b>The login is not real authentication.</b> Demo credentials live in JSON fixtures and are checked in the browser.</li>
+        <li><b>No data is protected or encrypted</b> — all state is in the device's local storage.</li>
+        <li><b>No server-side authorization</b> — role-based access is client-only; production must enforce it on a backend.</li>
+      </ul>
+    </div>
+
+    <h2>6. Current status and verification</h2>
+    <ul>
+      <li><b>Build:</b> production build compiles cleanly; every feature module is a separate lazy-loaded chunk.</li>
+      <li><b>Tests:</b> 52 of 52 unit tests pass in headless Chrome (auth, storage, roles, video CRUD, progress/completion, quiz scoring &amp; pass-mark boundaries, path unlocking, assignment resolution, feedback averaging).</li>
+      <li><b>Runnable demo:</b> <code>npm install</code> then <code>npm start</code>; sign in with a demo account. No server, database, or credentials required.</li>
+    </ul>
+    <p><b>Honest gaps:</b> the native Android project has not been generated yet (<code>npx cap add android</code> not run), so it has not been built/launched on a device. UI has not had formal cross-device QA or an accessibility audit.</p>
+
+    <h2>7. Converting to a native Android application</h2>
+    <p>Configured for Capacitor Android; the native project is not yet created. Remaining steps need the Android SDK and a device/emulator:</p>
+    <pre>npm run build          # produce the web build in dist/lnd-app
+npx cap add android    # generate the native Android (Gradle) project
+npx cap sync           # copy the web build + plugins into the native project
+npx cap open android   # open in Android Studio to run on device/emulator</pre>
+    <p><b>Prerequisites:</b> Android Studio + Android SDK, JDK 17. <b>Before an APK:</b> app icon/splash, status-bar/safe-area handling, hardware back-button wiring, hosted media (catalogue uses a remote sample video URL), and release signing.</p>
+
+    <h2>8. Path to production (roadmap)</h2>
+    <ul>
+      <li><b>Phase 2 — Backend &amp; real data:</b> API + database behind the existing service interfaces; move trusted business rules (scoring, unlocking, reporting) to the server.</li>
+      <li><b>Phase 3 — Real identity &amp; security:</b> SSO/identity provider; server-enforced authorization; audit logging and data protection.</li>
+      <li><b>Phase 4 — Integrations:</b> SSO, Slack, video hosting, AWS as needed.</li>
+      <li><b>Phase 5 — Hardening &amp; release:</b> cross-device &amp; accessibility QA, performance budgets, e2e tests, CI/CD, Android (and optionally iOS) store release.</li>
+    </ul>
+
+    <h2>9. Risks and assumptions</h2>
+    <table>
+      <tr><th>Risk / assumption</th><th>Impact</th><th>Mitigation</th></tr>
+      <tr><td>Demo login mistaken for real auth</td><td>Security misperception</td><td>Clearly labeled demo-only; Phase 3 adds real auth</td></tr>
+      <tr><td>localStorage limits / clearing</td><td>Demo data loss</td><td>Acceptable for POC; production uses a server</td></tr>
+      <tr><td>Android not yet built on device</td><td>Unknown device issues</td><td>Run cap add android + device test early in Phase 2</td></tr>
+      <tr><td>Remote video URL dependency</td><td>Playback needs network</td><td>Replace with hosted/owned media in production</td></tr>
+    </table>
+
+    <h2>10. How to run (developers)</h2>
+    <pre>npm install
+npm start           # dev server at http://localhost:4200
+npm run build       # production build
+npm test            # unit tests (watch)
+ng test --watch=false --browsers=ChromeHeadlessNoSandbox   # headless run</pre>
+    <p><b>Demo accounts</b> (seeded in <code>src/assets/mock/users.json</code>, demo-only): L&amp;D Admin <code>admin / admin123</code> · Employee <code>erin / employee123</code> · Partner <code>partner / partner123</code>.</p>
+
+    <div class="footer">LND Learning &amp; Development Platform — Proof of Concept. Full source documentation in <code>.kiro/specs/lnd-platform/</code> and <code>.kiro/steering/</code>.</div>
+  </body>
+</html>

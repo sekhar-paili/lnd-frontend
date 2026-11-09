@@ -1,0 +1,49 @@
+<h1>My Learning</h1>
+
+<ion-segment [(ngModel)]="segment" scrollable>
+  <ion-segment-button value="assigned">
+    <ion-label>Assigned ({{ assigned.length }})</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="in-progress">
+    <ion-label>In progress ({{ inProgress.length }})</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="completed">
+    <ion-label>Completed ({{ completed.length }})</ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<div [ngSwitch]="segment" class="segment-content">
+  <ng-container *ngSwitchCase="'assigned'">
+    <ng-container
+      *ngTemplateOutlet="list; context: { items: assigned, empty: 'Nothing assigned.' }"
+    ></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'in-progress'">
+    <ng-container
+      *ngTemplateOutlet="list; context: { items: inProgress, empty: 'Nothing in progress.' }"
+    ></ng-container>
+  </ng-container>
+  <ng-container *ngSwitchCase="'completed'">
+    <ng-container
+      *ngTemplateOutlet="list; context: { items: completed, empty: 'Nothing completed yet.' }"
+    ></ng-container>
+  </ng-container>
+</div>
+
+<ng-template #list let-items="items" let-empty="empty">
+  <ion-list lines="full" class="stagger" *ngIf="items.length > 0; else emptyTpl">
+    <ion-item button *ngFor="let item of items" [routerLink]="item.route">
+      <ion-icon
+        slot="start"
+        [name]="item.type === 'VIDEO' ? 'play-circle-outline' : 'git-branch-outline'"
+      ></ion-icon>
+      <ion-label>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.type === 'VIDEO' ? 'Video' : 'Learning path' }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <ng-template #emptyTpl>
+    <app-empty-state icon="school-outline" [message]="empty"></app-empty-state>
+  </ng-template>
+</ng-template>

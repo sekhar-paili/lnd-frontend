@@ -1,0 +1,68 @@
+:host {
+  display: block;
+}
+
+ion-list {
+  background: transparent;
+  padding-top: 8px;
+}
+
+ion-item {
+  --background: transparent;
+  --color: #ffffff;
+  --border-color: rgba(255, 255, 255, 0.12);
+  transition: transform var(--dur-fast, 0.18s) var(--ease-out, ease-out);
+
+  ion-icon {
+    color: #ffffff;
+    transition: transform var(--dur-med, 0.4s) var(--ease-spring, ease-out);
+  }
+
+  ion-label {
+    color: #ffffff;
+  }
+}
+
+@media (hover: hover) {
+  ion-item:hover {
+    transform: translateX(3px);
+
+    ion-icon {
+      transform: scale(1.18);
+    }
+  }
+}
+
+/* Each time the menu opens, the entries slide in one after another. */
+:host-context(.shell-sidenav.open) ion-item {
+  animation: lnd-nav-in 0.45s var(--ease-out, ease-out) backwards;
+}
+
+@for $i from 1 through 10 {
+  :host-context(.shell-sidenav.open) ion-item:nth-of-type(#{$i}) {
+    animation-delay: #{80 + ($i - 1) * 45}ms;
+  }
+}
+
+@keyframes lnd-nav-in {
+  from {
+    opacity: 0;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.active-link {
+  --background: rgba(255, 255, 255, 0.18);
+  /* Bright bar on the left edge marks the current page. */
+  box-shadow: inset 4px 0 0 #ffffff;
+
+  ion-icon,
+  ion-label {
+    color: #ffffff;
+    font-weight: 600;
+  }
+}

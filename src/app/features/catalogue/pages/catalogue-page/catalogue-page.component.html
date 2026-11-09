@@ -1,0 +1,39 @@
+<h1>Video Catalogue</h1>
+
+<div class="catalogue-controls">
+  <app-search-bar
+    placeholder="Search videos..."
+    (valueChange)="onSearch($event)"
+  ></app-search-bar>
+
+  <ion-item class="category-select" lines="none">
+    <ion-select
+      label="Category"
+      labelPlacement="stacked"
+      interface="popover"
+      [value]="selectedCategory"
+      (ionChange)="onCategory($event.detail.value)"
+    >
+      <ion-select-option [value]="null">All categories</ion-select-option>
+      <ion-select-option *ngFor="let c of categories$ | async" [value]="c.id">
+        {{ c.name }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+</div>
+
+<ng-container *ngIf="videos$ | async as videos">
+  <div class="video-grid stagger" *ngIf="videos.length > 0; else empty">
+    <app-video-card
+      *ngFor="let v of videos"
+      [video]="v"
+      [categoryName]="categoryName(v.categoryId, categories$ | async)"
+    ></app-video-card>
+  </div>
+  <ng-template #empty>
+    <app-empty-state
+      icon="search-outline"
+      message="No videos match your search."
+    ></app-empty-state>
+  </ng-template>
+</ng-container>

@@ -1,0 +1,26 @@
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+
+  ion-icon {
+    cursor: pointer;
+    color: #fbc02d;
+    font-size: 20px;
+  }
+
+  &.readonly ion-icon {
+    cursor: default;
+  }
+}
+
+/* Stars grow under the pointer; read-only stars stay still. */
+.rating ion-icon {
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+
+@media (hover: hover) {
+  .rating:not(.readonly) ion-icon:hover {
+    transform: scale(1.3);
+  }
+}

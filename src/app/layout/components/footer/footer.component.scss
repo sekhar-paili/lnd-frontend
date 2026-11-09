@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  grid-row: 3;
+}
+
+.app-footer {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  background: linear-gradient(90deg, #0f6b52 0%, #1e8a4f 55%, #4caf6d 100%);
+  color: #ffffff;
+  font-size: 13px;
+  text-align: center;
+}

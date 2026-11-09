@@ -1,0 +1,104 @@
+<h1>Video Metadata Management</h1>
+
+<div class="grid-admin">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ editingId ? 'Edit video' : 'Add video' }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form class="video-form" [formGroup]="form" (ngSubmit)="save()">
+        <ion-item>
+          <ion-input
+            label="Title"
+            labelPlacement="stacked"
+            formControlName="title"
+          ></ion-input>
+        </ion-item>
+        <div class="field-error" *ngIf="form.controls.title.touched && form.controls.title.invalid">
+          Title is required (min 2 chars).
+        </div>
+
+        <ion-item>
+          <ion-textarea
+            label="Description"
+            labelPlacement="stacked"
+            [rows]="2"
+            formControlName="description"
+          ></ion-textarea>
+        </ion-item>
+        <div class="field-error" *ngIf="form.controls.description.touched && form.controls.description.invalid">
+          Description is required.
+        </div>
+
+        <ion-item>
+          <ion-select
+            label="Category"
+            labelPlacement="stacked"
+            interface="popover"
+            formControlName="categoryId"
+          >
+            <ion-select-option *ngFor="let c of categories$ | async" [value]="c.id">
+              {{ c.name }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        <div class="field-error" *ngIf="form.controls.categoryId.touched && form.controls.categoryId.invalid">
+          Category is required.
+        </div>
+
+        <ion-item>
+          <ion-input
+            label="Duration (seconds)"
+            labelPlacement="stacked"
+            type="number"
+            formControlName="durationSeconds"
+          ></ion-input>
+        </ion-item>
+        <div class="field-error" *ngIf="form.controls.durationSeconds.touched && form.controls.durationSeconds.invalid">
+          Duration must be at least 1 second.
+        </div>
+
+        <ion-item>
+          <ion-input
+            label="Source URL"
+            labelPlacement="stacked"
+            formControlName="sourceUrl"
+          ></ion-input>
+        </ion-item>
+        <div class="field-error" *ngIf="form.controls.sourceUrl.touched && form.controls.sourceUrl.invalid">
+          Enter a valid URL starting with http:// or https://.
+        </div>
+
+        <div class="form-actions">
+          <ion-button type="submit" [disabled]="saving">{{ editingId ? 'Update' : 'Add' }}</ion-button>
+          <ion-button type="button" fill="outline" *ngIf="editingId" (click)="cancel()">
+            Cancel
+          </ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Catalogue</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list lines="full">
+        <ion-item class="video-row" *ngFor="let v of videos$ | async">
+          <ion-icon slot="start" name="film-outline"></ion-icon>
+          <ion-label>
+            <h3>{{ v.title }}</h3>
+            <p>{{ v.durationSeconds | duration }}</p>
+          </ion-label>
+          <ion-button slot="end" fill="clear" (click)="edit(v)" aria-label="Edit">
+            <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+          </ion-button>
+          <ion-button slot="end" fill="clear" color="danger" (click)="remove(v)" aria-label="Delete">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</div>

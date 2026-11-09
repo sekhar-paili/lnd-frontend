@@ -1,0 +1,150 @@
+:host {
+  display: block;
+}
+
+.role-label {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+  text-transform: none;
+  margin: 0 var(--space-xs, 4px);
+  max-width: 160px;
+  overflow: hidden;
+
+  span.name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+
+  small {
+    opacity: 0.85;
+    font-size: 11px;
+  }
+}
+
+ion-popover {
+  --width: 270px;
+  --box-shadow: 0 18px 40px rgba(15, 107, 82, 0.28);
+}
+
+ion-popover::part(content) {
+  border-radius: 18px;
+  overflow: hidden;
+  animation: menu-pop 0.35s var(--ease-spring, ease-out);
+  transform-origin: top right;
+}
+
+@keyframes menu-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.85) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.user-summary {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--space-md, 16px);
+  background: var(--lnd-gradient, linear-gradient(90deg, #0f6b52, #4caf6d));
+  color: #ffffff;
+
+  /* Soft light blob in the corner. */
+  &::after {
+    content: '';
+    position: absolute;
+    right: -30px;
+    top: -40px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    animation: lnd-float 6s ease-in-out infinite;
+  }
+
+  .user-avatar {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    font-size: var(--fs-lg, 16px);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background: rgba(255, 255, 255, 0.22);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    animation: lnd-pop 0.5s var(--ease-spring, ease-out) 0.1s backwards;
+  }
+
+  .user-meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 0;
+    line-height: 1.2;
+    animation: lnd-fade-up 0.4s var(--ease-out, ease-out) 0.15s backwards;
+
+    strong {
+      font-size: var(--fs-lg, 16px);
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .role-chip {
+    padding: 2px 10px;
+    border-radius: 999px;
+    font-size: var(--fs-xs, 12px);
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+}
+
+.menu-list {
+  padding: 6px;
+  background: #fff;
+}
+
+.signout {
+  --background: transparent;
+  --background-hover: rgba(220, 38, 38, 0.08);
+  --background-hover-opacity: 1;
+  --color: #b91c1c;
+  --min-height: 46px;
+  border-radius: 12px;
+  font-weight: 600;
+  animation: lnd-fade-up 0.4s var(--ease-out, ease-out) 0.25s backwards;
+
+  ion-icon {
+    transition: transform 0.25s var(--ease-out, ease-out);
+  }
+
+  &:hover ion-icon {
+    transform: translateX(4px);
+  }
+}
+
+/* On phones, collapse to just the avatar icon so the header never overlaps. */
+@media (max-width: 575px) {
+  .role-label,
+  .chevron {
+    display: none;
+  }
+}

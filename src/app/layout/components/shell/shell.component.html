@@ -1,0 +1,41 @@
+<div class="shell">
+  <!-- Full-width fixed header -->
+  <header class="shell-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button fill="clear" color="light" (click)="toggleMenu()" aria-label="Toggle menu">
+          <ion-icon slot="icon-only" name="menu-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>
+        <a class="title-link" routerLink="/dashboard" aria-label="Go to dashboard"><span class="title-full">Learning &amp; Development</span><span class="title-short" aria-hidden="true">L&amp;D</span></a>
+      </ion-title>
+      <ion-buttons slot="end">
+        <app-role-switcher></app-role-switcher>
+      </ion-buttons>
+    </ion-toolbar>
+  </header>
+
+  <!-- Middle band: collapsible sidenav + scrollable content -->
+  <div class="shell-body">
+    <aside class="shell-sidenav" [class.open]="menuOpen">
+      <app-sidenav (navigate)="closeOnNarrow()"></app-sidenav>
+    </aside>
+
+    <!-- Backdrop on narrow screens when the menu is open -->
+    <div
+      class="shell-backdrop"
+      *ngIf="menuOpen && isNarrow"
+      (click)="toggleMenu()"
+    ></div>
+
+    <div class="shell-content">
+      <main class="page-container">
+        <router-outlet></router-outlet>
+      </main>
+    </div>
+  </div>
+
+  <!-- Full-width fixed footer -->
+  <app-footer></app-footer>
+</div>

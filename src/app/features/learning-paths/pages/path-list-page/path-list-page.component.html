@@ -1,0 +1,30 @@
+<h1>Learning Paths</h1>
+
+<ng-container *ngIf="paths$ | async as paths">
+  <div class="grid grid-cards stagger" *ngIf="paths.length > 0; else empty">
+    <ion-card
+      class="path-card"
+      button
+      *ngFor="let p of paths"
+      [routerLink]="['/learning-paths', p.id]"
+    >
+      <ion-card-header>
+        <ion-card-title>{{ p.title }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{ p.description }}</p>
+        <div class="footer">
+          <span>{{ p.steps.length }} steps</span>
+          <app-status-badge
+            *ngIf="isComplete(p)"
+            label="completed"
+            tone="success"
+          ></app-status-badge>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+  <ng-template #empty>
+    <app-empty-state icon="git-branch-outline" message="No learning paths yet."></app-empty-state>
+  </ng-template>
+</ng-container>

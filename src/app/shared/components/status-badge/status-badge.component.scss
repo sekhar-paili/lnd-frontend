@@ -1,0 +1,28 @@
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  background: #e0e0e0;
+  color: #333;
+
+  &[data-tone='info'] {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+  &[data-tone='success'] {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+  &[data-tone='warn'] {
+    background: #fff3e0;
+    color: #e65100;
+  }
+}
+
+/* Badges pop in when they appear (e.g. a video becoming "completed"). */
+.badge {
+  animation: lnd-pop 0.45s var(--ease-spring) backwards;
+}

@@ -1,0 +1,73 @@
+# Angular 17 + Ionic + Capacitor frontend
+
+# Dependencies
+/node_modules
+
+# Build output
+/dist
+/out-tsc
+/tmp
+/bazel-out
+
+# Angular / Ionic caches
+/.angular/cache
+/.sass-cache/
+.sass-cache/
+/.ionic
+
+# Test and coverage output
+/coverage
+testem.log
+/libpeerconnection.log
+
+# Capacitor: generated web assets in the native projects
+/android/app/src/main/assets/public
+/android/app/src/main/assets/capacitor.config.json
+/android/app/src/main/assets/capacitor.plugins.json
+/android/app/src/main/res/xml/config.xml
+/ios/App/App/public
+/ios/App/Pods
+/ios/App/App/capacitor.config.json
+/ios/App/App/config.xml
+
+# Android build output and local files (see also android/.gitignore)
+/android/.gradle
+/android/build
+/android/app/build
+/android/local.properties
+/android/captures
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# Environment files with secrets (Angular environment.ts files are source
+# code and stay tracked)
+.env
+.env.*
+!.env.example
+
+# Logs and scratch files from local builds and checks
+*.log
+npm-debug.log*
+yarn-error.log*
+/b.txt
+/build-check.txt
+/test-check.txt
+/tsc.txt
+/tsc-output.txt
+/compile.log
+
+# IDEs and editors
+.idea/
+.vscode/*
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.sublime-workspace
+.history/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -1,0 +1,7 @@
+<span class="rating" [class.readonly]="readonly">
+  <ion-icon
+    *ngFor="let star of stars"
+    (click)="select(star)"
+    [name]="star <= rating ? 'star' : 'star-outline'"
+  ></ion-icon>
+</span>

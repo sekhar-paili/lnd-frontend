@@ -1,0 +1,171 @@
+:host {
+  display: block;
+  height: 100%;
+
+  /* Safexpress DigiSpace style: teal-to-green horizontal gradient. */
+  --lnd-gradient: linear-gradient(90deg, #0f6b52 0%, #1e8a4f 55%, #4caf6d 100%);
+  --sidenav-width: 240px;
+}
+
+/* Full-viewport grid: fixed header row, flexible middle, fixed footer row.
+   Header and footer span the full width and never move when the menu toggles. */
+.shell {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+}
+
+/* Full-width fixed header */
+.shell-header {
+  grid-row: 1;
+  position: relative;
+  z-index: 3;
+  overflow: hidden;
+  box-shadow: 0 2px 14px rgba(15, 107, 82, 0.35);
+
+  /* A soft highlight that sweeps across the header every few seconds. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      110deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.2) 50%,
+      transparent 70%
+    );
+    transform: translateX(-120%);
+    animation: lnd-sheen 8s ease-in-out 1.2s infinite;
+    pointer-events: none;
+  }
+
+  ion-toolbar {
+    --background: var(--lnd-gradient);
+    --color: #ffffff;
+    --border-width: 0;
+  }
+
+  /* Title sits left, next to the menu button, and never wraps. */
+  ion-title {
+    /* Ionic positions the title over the whole bar, so reserve room for the
+       menu button (start) and the user button (end) or the text overlaps them. */
+    padding-inline: 56px 56px;
+    text-align: start;
+    font-size: var(--fs-xl);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .title-link {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .title-short {
+    display: none;
+  }
+}
+
+/* Wide phones / small tablets: the user button also shows name and role. */
+@media (min-width: 576px) {
+  .shell-header ion-title {
+    padding-inline-end: 220px;
+  }
+}
+
+/* Tablet and up: title centred in the bar between the two button groups. */
+@media (min-width: 768px) {
+  .shell-header ion-title {
+    text-align: center;
+    padding-inline: 220px;
+  }
+}
+
+/* Small phones: smaller type, and the short name when space runs out. */
+@media (max-width: 575px) {
+  .shell-header ion-title {
+    font-size: var(--fs-lg);
+  }
+}
+
+@media (max-width: 359px) {
+  .shell-header .title-full {
+    display: none;
+  }
+
+  .shell-header .title-short {
+    display: inline;
+  }
+}
+
+/* Middle band holds the sidenav and the scrollable content side by side. */
+.shell-body {
+  grid-row: 2;
+  position: relative;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Collapsible sidenav. Collapsing only changes this element's width,
+   so it never affects the header or footer. */
+.shell-sidenav {
+  flex: 0 0 auto;
+  width: 0;
+  overflow: hidden auto;
+  background: var(--lnd-gradient);
+  transition: width 0.35s var(--ease-out);
+
+  &.open {
+    width: var(--sidenav-width);
+  }
+}
+
+/* Scrollable content area between header and footer. A faint green wash in
+   two corners keeps large empty areas from looking flat. */
+.shell-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: auto;
+  background:
+    radial-gradient(900px 360px at 92% -8%, rgba(76, 175, 109, 0.14), transparent 65%),
+    radial-gradient(760px 360px at -8% 108%, rgba(15, 107, 82, 0.1), transparent 65%),
+    var(--ion-background-color, #f5f5f7);
+}
+
+.page-container {
+  padding: var(--space-md);
+  max-width: var(--page-max-width, 1100px);
+  margin: 0 auto;
+}
+
+/* On narrow screens the sidenav overlays the content with a backdrop. */
+.shell-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 5;
+  animation: lnd-fade-in 0.25s ease-out;
+}
+
+@media (max-width: 767px) {
+  /* Sidenav overlays the content (doesn't squeeze it) and stays within
+     the middle band, so it never covers the fixed header or footer. */
+  .shell-sidenav {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 6;
+    max-width: 80vw;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.25);
+  }
+
+  .page-container {
+    padding: var(--space-sm);
+  }
+}

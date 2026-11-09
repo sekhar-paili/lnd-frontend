@@ -1,0 +1,107 @@
+<h1>Training Assignments</h1>
+
+<div class="grid-admin">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Create assignment</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form class="assignment-form" [formGroup]="form" (ngSubmit)="create()">
+        <ion-item>
+          <ion-select
+            label="Audience type"
+            labelPlacement="stacked"
+            interface="popover"
+            formControlName="audienceType"
+          >
+            <ion-select-option [value]="AudienceType.Role">Role</ion-select-option>
+            <ion-select-option [value]="AudienceType.Group">Group</ion-select-option>
+            <ion-select-option [value]="AudienceType.Individual">Individual (user id)</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="form.value.audienceType === AudienceType.Role">
+          <ion-select
+            label="Role"
+            labelPlacement="stacked"
+            interface="popover"
+            formControlName="audienceValue"
+          >
+            <ion-select-option *ngFor="let r of roles" [value]="r">
+              {{ roleLabels[r] }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="form.value.audienceType === AudienceType.Group">
+          <ion-select
+            label="Group"
+            labelPlacement="stacked"
+            interface="popover"
+            formControlName="audienceValue"
+          >
+            <ion-select-option *ngFor="let g of groups" [value]="g">{{ g }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item *ngIf="form.value.audienceType === AudienceType.Individual">
+          <ion-input
+            label="User id"
+            labelPlacement="stacked"
+            formControlName="audienceValue"
+            placeholder="e.g. u-emp-1"
+          ></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-select
+            label="Item type"
+            labelPlacement="stacked"
+            interface="popover"
+            formControlName="itemType"
+          >
+            <ion-select-option [value]="AssignableType.Video">Video</ion-select-option>
+            <ion-select-option [value]="AssignableType.LearningPath">Learning path</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-select
+            label="Item"
+            labelPlacement="stacked"
+            interface="popover"
+            formControlName="itemId"
+          >
+            <ng-container *ngIf="form.value.itemType === AssignableType.Video">
+              <ion-select-option *ngFor="let v of videos" [value]="v.id">{{ v.title }}</ion-select-option>
+            </ng-container>
+            <ng-container *ngIf="form.value.itemType === AssignableType.LearningPath">
+              <ion-select-option *ngFor="let p of paths" [value]="p.id">{{ p.title }}</ion-select-option>
+            </ng-container>
+          </ion-select>
+        </ion-item>
+
+        <ion-button type="submit" class="ion-margin-top" [disabled]="saving">Create</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Existing assignments</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ng-container *ngIf="assignments$ | async as assignments">
+        <ion-list lines="full" *ngIf="assignments.length > 0; else none">
+          <ion-item *ngFor="let a of assignments">
+            <ion-icon slot="start" name="clipboard-outline"></ion-icon>
+            <ion-label class="ion-text-wrap">{{ describe(a) }}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ng-template #none>
+          <app-empty-state icon="clipboard-outline" message="No assignments yet."></app-empty-state>
+        </ng-template>
+      </ng-container>
+    </ion-card-content>
+  </ion-card>
+</div>

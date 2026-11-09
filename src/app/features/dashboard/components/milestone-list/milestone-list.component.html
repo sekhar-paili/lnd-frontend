@@ -1,0 +1,49 @@
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Project Milestones</ion-card-title>
+    <p class="summary" *ngIf="milestones.length > 0">
+      {{ doneCount }} of {{ milestones.length }} complete
+    </p>
+    <div
+      class="overall"
+      *ngIf="milestones.length > 0"
+      role="progressbar"
+      aria-label="Milestones completed"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      [attr.aria-valuenow]="donePercent"
+    >
+      <span [style.width.%]="donePercent"></span>
+    </div>
+  </ion-card-header>
+  <ion-card-content>
+    <ol class="timeline stagger" *ngIf="milestones.length > 0">
+      <li
+        *ngFor="let m of milestones"
+        class="step"
+        [class.done]="m.status === 'DONE'"
+        [class.active]="m.status === 'IN_PROGRESS'"
+      >
+        <span class="dot" aria-hidden="true">
+          <ion-icon [name]="icon(m.status)"></ion-icon>
+        </span>
+        <div class="body">
+          <h3>{{ m.title }}</h3>
+          <p class="date">
+            <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
+            {{ m.date | date: 'd MMM y' }}
+          </p>
+        </div>
+        <app-status-badge
+          [label]="label(m.status)"
+          [tone]="tone(m.status)"
+        ></app-status-badge>
+      </li>
+    </ol>
+    <app-empty-state
+      *ngIf="milestones.length === 0"
+      icon="flag-outline"
+      message="No milestones yet."
+    ></app-empty-state>
+  </ion-card-content>
+</ion-card>

@@ -1,0 +1,30 @@
+<ion-button fill="clear" color="light" id="user-trigger">
+  <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+  <span class="role-label">
+    <span class="name">{{ (activeUser$ | async)?.name }}</span>
+    <small>({{ labels[(activeRole$ | async)!] }})</small>
+  </span>
+  <ion-icon slot="end" class="chevron" name="chevron-down-outline"></ion-icon>
+</ion-button>
+
+<ion-popover trigger="user-trigger" dismissOnSelect="true" [showBackdrop]="true">
+  <ng-template>
+    <ion-content>
+      <!-- Read-only identity: role is fixed to the signed-in account. -->
+      <div class="user-summary" *ngIf="activeUser$ | async as user">
+        <span class="user-avatar" aria-hidden="true">{{ initials(user.name) }}</span>
+        <div class="user-meta">
+          <strong>{{ user.name }}</strong>
+          <span class="role-chip">{{ labels[user.role] }}</span>
+        </div>
+      </div>
+
+      <ion-list lines="none" class="menu-list">
+        <ion-item button (click)="logout()" detail="false" class="signout">
+          <ion-icon slot="start" name="log-out-outline"></ion-icon>
+          <ion-label>Sign out</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ng-template>
+</ion-popover>

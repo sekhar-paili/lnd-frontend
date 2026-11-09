@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 760" font-family="Segoe UI, Roboto, Arial, sans-serif">
+  <defs>
+    <linearGradient id="hdr" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f6b52"/>
+      <stop offset="0.55" stop-color="#1e8a4f"/>
+      <stop offset="1" stop-color="#4caf6d"/>
+    </linearGradient>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="4.5" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#64748b"/></marker>
+  </defs>
+
+  <rect width="980" height="760" fill="#ffffff"/>
+
+  <!-- Title band -->
+  <rect x="0" y="0" width="980" height="54" fill="url(#hdr)"/>
+  <text x="24" y="34" fill="#ffffff" font-size="20" font-weight="600">LND Platform — Architecture</text>
+  <text x="956" y="34" fill="#eafff1" font-size="12" text-anchor="end">Angular 17 · Ionic 7 · Capacitor 6  |  Express · PostgreSQL</text>
+
+  <!-- ===== TIER 1: CLIENT ===== -->
+  <rect x="20" y="70" width="940" height="318" rx="10" fill="#fafbfc" stroke="#cbd2d9"/>
+  <text x="36" y="92" fill="#475569" font-size="13" font-weight="600">1 · Client — browser, or Android app (Capacitor WebView)</text>
+
+  <rect x="36" y="104" width="170" height="52" rx="8" fill="#eef2ff" stroke="#4f46e5"/>
+  <text x="121" y="127" fill="#312e81" font-size="12" font-weight="600" text-anchor="middle">AuthModule</text>
+  <text x="121" y="144" fill="#4f46e5" font-size="11" text-anchor="middle">Login (public)</text>
+
+  <rect x="222" y="104" width="300" height="52" rx="8" fill="#fff6e6" stroke="#e65100"/>
+  <text x="372" y="127" fill="#7a3600" font-size="12" font-weight="600" text-anchor="middle">Route guards (usability only)</text>
+  <text x="372" y="144" fill="#7a3600" font-size="11" text-anchor="middle">AuthGuard · RoleGuard (admin routes)</text>
+
+  <rect x="538" y="104" width="386" height="52" rx="8" fill="#e8f5ec" stroke="#15803d"/>
+  <text x="731" y="127" fill="#0f4a25" font-size="12" font-weight="600" text-anchor="middle">LayoutModule — app shell</text>
+  <text x="731" y="144" fill="#0f4a25" font-size="11" text-anchor="middle">Fixed header · collapsible sidenav · fixed footer</text>
+
+  <rect x="36" y="170" width="888" height="108" rx="8" fill="#f4faf6" stroke="#9fd3b0"/>
+  <text x="48" y="189" fill="#0f4a25" font-size="12" font-weight="600">Feature modules (lazy-loaded)</text>
+  <g font-size="11" text-anchor="middle" fill="#1f2933">
+    <rect x="48" y="198" width="126" height="30" rx="6" fill="#fff" stroke="#9fd3b0"/><text x="111" y="217">Dashboard</text>
+    <rect x="182" y="198" width="126" height="30" rx="6" fill="#fff" stroke="#9fd3b0"/><text x="245" y="217">Catalogue</text>
+    <rect x="316" y="198" width="126" height="30" rx="6" fill="#fff" stroke="#9fd3b0"/><text x="379" y="217">Player</text>
+    <rect x="450" y="198" width="126" height="30" rx="6" fill="#fff" stroke="#9fd3b0"/><text x="513" y="217">My Learning</text>
+    <rect x="584" y="198" width="126" height="30" rx="6" fill="#fff" stroke="#9fd3b0"/><text x="647" y="217">Learning Paths</text>
+    <rect x="718" y="198" width="194" height="30" rx="6" fill="#fff" stroke="#9fd3b0"/><text x="815" y="217">Quiz · Feedback</text>
+  </g>
+  <g font-size="11" text-anchor="middle" fill="#7a1f16">
+    <rect x="48" y="236" width="204" height="30" rx="6" fill="#fde8e8" stroke="#c0392b"/><text x="150" y="255">Video Admin (admin)</text>
+    <rect x="260" y="236" width="204" height="30" rx="6" fill="#fde8e8" stroke="#c0392b"/><text x="362" y="255">Assignments (admin)</text>
+    <rect x="472" y="236" width="204" height="30" rx="6" fill="#fde8e8" stroke="#c0392b"/><text x="574" y="255">Quiz Builder (admin)</text>
+    <rect x="684" y="236" width="228" height="30" rx="6" fill="#fde8e8" stroke="#c0392b"/><text x="798" y="255">Reports (admin)</text>
+  </g>
+
+  <rect x="36" y="292" width="888" height="82" rx="8" fill="#e8f5ec" stroke="#15803d"/>
+  <text x="48" y="311" fill="#0f4a25" font-size="12" font-weight="600">CoreModule — services with in-memory caches (RxJS)</text>
+  <text x="48" y="332" fill="#0f4a25" font-size="11">ApiService · AuthService · RoleService · AppStateService · Video · Progress · Quiz · LearningPath · Assignment · Feedback · Report · Milestone</text>
+  <text x="48" y="352" fill="#0f4a25" font-size="11">AuthInterceptor: adds the token to API calls only, signs out on 401.  Caches are cleared on sign-out.  localStorage holds only the token + active user.</text>
+
+  <!-- connector 1 -> 2 -->
+  <line x1="490" y1="388" x2="490" y2="430" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="502" y="414" fill="#475569" font-size="11">HTTP / JSON  ·  Authorization: Bearer &lt;JWT&gt;</text>
+
+  <!-- ===== TIER 2: API ===== -->
+  <rect x="20" y="432" width="940" height="188" rx="10" fill="#fafbfc" stroke="#cbd2d9"/>
+  <text x="36" y="454" fill="#475569" font-size="13" font-weight="600">2 · REST API — Node.js · Express · TypeScript   (28 endpoints under /api)</text>
+
+  <rect x="36" y="466" width="288" height="66" rx="8" fill="#fff6e6" stroke="#e65100"/>
+  <text x="180" y="487" fill="#7a3600" font-size="12" font-weight="600" text-anchor="middle">Request pipeline</text>
+  <text x="180" y="505" fill="#7a3600" font-size="11" text-anchor="middle">helmet · CORS allow-list · JSON body limit</text>
+  <text x="180" y="521" fill="#7a3600" font-size="11" text-anchor="middle">login rate limit (20 / 15 min)</text>
+
+  <rect x="336" y="466" width="288" height="66" rx="8" fill="#fde8e8" stroke="#c0392b"/>
+  <text x="480" y="487" fill="#7a1f16" font-size="12" font-weight="600" text-anchor="middle">Authorization (authoritative)</text>
+  <text x="480" y="505" fill="#7a1f16" font-size="11" text-anchor="middle">requireAuth: verify JWT → 401</text>
+  <text x="480" y="521" fill="#7a1f16" font-size="11" text-anchor="middle">requireRole(LND_ADMIN) → 403</text>
+
+  <rect x="636" y="466" width="288" height="66" rx="8" fill="#e8f5ec" stroke="#15803d"/>
+  <text x="780" y="487" fill="#0f4a25" font-size="12" font-weight="600" text-anchor="middle">Validation &amp; business rules</text>
+  <text x="780" y="505" fill="#0f4a25" font-size="11" text-anchor="middle">zod schemas · quiz grading on server</text>
+  <text x="780" y="521" fill="#0f4a25" font-size="11" text-anchor="middle">answer keys never sent to learners</text>
+
+  <rect x="36" y="544" width="888" height="62" rx="8" fill="#f4faf6" stroke="#9fd3b0"/>
+  <text x="48" y="563" fill="#0f4a25" font-size="12" font-weight="600">Routers</text>
+  <text x="48" y="583" fill="#0f4a25" font-size="11">auth · videos · categories · milestones · progress · quizzes (+ attempts) · learning-paths · assignments · feedback · reports · health</text>
+  <text x="48" y="598" fill="#0f4a25" font-size="11">Parameterized SQL via pg (no ORM) · central error handler · passwords checked against bcrypt hashes</text>
+
+  <!-- connector 2 -> 3 -->
+  <line x1="490" y1="620" x2="490" y2="660" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="502" y="645" fill="#475569" font-size="11">SQL over TCP (pg connection pool)</text>
+
+  <!-- ===== TIER 3: DATABASE ===== -->
+  <rect x="20" y="662" width="560" height="78" rx="10" fill="#fff6e6" stroke="#e65100"/>
+  <text x="36" y="684" fill="#7a3600" font-size="13" font-weight="600">3 · PostgreSQL — 11 tables</text>
+  <text x="36" y="704" fill="#7a3600" font-size="11">users · categories · videos · quizzes (questions as JSONB) · learning_paths · learning_path_steps</text>
+  <text x="36" y="722" fill="#7a3600" font-size="11">assignments · video_progress · quiz_attempts · feedback · milestones     (schema.sql, seed.ts)</text>
+
+  <!-- Not yet -->
+  <rect x="596" y="662" width="364" height="78" rx="10" fill="#eef2ff" stroke="#4f46e5" stroke-dasharray="6 4"/>
+  <text x="612" y="684" fill="#312e81" font-size="13" font-weight="600">Not built yet</text>
+  <text x="612" y="704" fill="#4f46e5" font-size="11">SSO / identity provider · user management · Slack</text>
+  <text x="612" y="722" fill="#4f46e5" font-size="11">HTTPS hosting · CI/CD · owned media hosting</text>
+</svg>

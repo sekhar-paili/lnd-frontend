@@ -1,0 +1,147 @@
+.login-content {
+  --background: linear-gradient(135deg, #0f6b52 0%, #1e8a4f 55%, #4caf6d 100%);
+}
+
+.login-content {
+  position: relative;
+}
+
+/* Clips the shapes so those hanging off-screen never add scrollbars. */
+.orbs {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Soft blurred shapes drifting behind the card. */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(2px);
+  pointer-events: none;
+  animation: lnd-orb 14s ease-in-out infinite;
+
+  &.orb-1 {
+    width: 320px;
+    height: 320px;
+    top: -90px;
+    left: -80px;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0));
+  }
+
+  &.orb-2 {
+    width: 260px;
+    height: 260px;
+    right: -70px;
+    bottom: 12%;
+    background: radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0));
+    animation-duration: 18s;
+    animation-delay: -6s;
+  }
+
+  &.orb-3 {
+    width: 180px;
+    height: 180px;
+    left: 18%;
+    bottom: -50px;
+    background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0));
+    animation-duration: 11s;
+    animation-delay: -3s;
+  }
+}
+
+.login-wrapper {
+  position: relative;
+  min-height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-md, 16px);
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  margin: 0;
+  border-radius: 18px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  animation: lnd-pop 0.65s var(--ease-spring, ease-out) backwards;
+}
+
+.brand {
+  text-align: center;
+  padding: var(--space-lg, 24px) var(--space-md, 16px) 0;
+
+  ion-icon {
+    font-size: 40px;
+    padding: 14px;
+    border-radius: 50%;
+    color: #ffffff;
+    background: var(--lnd-gradient);
+    box-shadow: 0 8px 20px rgba(21, 128, 61, 0.35);
+    animation:
+      lnd-float 4s ease-in-out infinite,
+      lnd-pulse-ring 2.4s ease-out infinite;
+  }
+
+  h1 {
+    margin: var(--space-sm, 8px) 0 0;
+    font-size: var(--fs-2xl);
+  }
+
+  p {
+    margin: 2px 0 0;
+    color: var(--ion-color-medium, #777);
+    font-size: 13px;
+  }
+}
+
+form {
+  margin-top: var(--space-sm, 8px);
+}
+
+.login-button {
+  margin-top: var(--space-md, 16px);
+}
+
+.field-error {
+  color: var(--ion-color-danger);
+  font-size: 12px;
+  margin: 2px 0 var(--space-sm, 8px) 12px;
+}
+
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ion-color-danger);
+  font-size: 14px;
+  margin: var(--space-sm, 8px) 0 0;
+}
+
+.demo-box {
+  margin-top: var(--space-lg, 24px);
+  padding-top: var(--space-md, 16px);
+  border-top: 1px solid var(--ion-color-step-150, #e0e0e0);
+
+  .demo-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ion-color-medium, #666);
+    margin: 0 0 var(--space-xs, 4px);
+  }
+
+  .demo-note {
+    font-size: var(--fs-xs);
+    color: var(--ion-color-medium, #999);
+    margin: var(--space-sm, 8px) 0 0;
+  }
+}
+
+.build-version {
+  margin: var(--space-md, 16px) 0 0;
+  text-align: center;
+  font-size: var(--fs-xs);
+  color: var(--ion-color-medium, #999);
+}

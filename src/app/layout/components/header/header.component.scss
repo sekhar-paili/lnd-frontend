@@ -1,0 +1,12 @@
+.app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+
+  .title {
+    margin-left: 8px;
+    font-size: 18px;
+  }
+}

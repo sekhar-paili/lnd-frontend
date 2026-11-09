@@ -1,0 +1,644 @@
+/* Global styles for the LND platform (Ionic).
+   A single spacing scale keeps gaps, paddings, and card heights symmetric
+   across every page. Use these tokens instead of ad-hoc pixel values. */
+
+:root {
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  --card-padding: var(--space-md);
+  --page-max-width: 1100px;
+}
+
+/* ---- Page scaffold ---- */
+.page-container {
+  padding: var(--space-md);
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+}
+
+/* Page titles use the Safexpress primary green on every page. */
+h1 {
+  font-size: var(--fs-3xl);
+  font-weight: 600;
+  color: var(--ion-color-primary, #15803d);
+  margin: var(--space-sm) 0 var(--space-md);
+}
+
+h2 {
+  font-size: var(--fs-xl);
+  margin: var(--space-lg) 0 var(--space-sm);
+}
+
+.subtitle {
+  color: var(--ion-color-medium, #777);
+  margin: calc(var(--space-sm) * -1) 0 var(--space-md);
+}
+
+/* ---- Grid helpers (consistent gap + equal-height cards) ---- */
+.grid {
+  display: grid;
+  gap: var(--space-md);
+  align-items: stretch;
+}
+
+.grid-cards {
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+/* A two-column content grid used on dashboard and admin screens.
+   Cards in the same row stretch to equal height. */
+.grid-two {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-md);
+  align-items: stretch;
+}
+
+.grid-admin {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: var(--space-lg);
+  align-items: stretch;
+}
+
+@media (max-width: 899px) {
+  .grid-two,
+  .grid-admin {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Cards: uniform margin, padding, and full-height in grids ---- */
+ion-card {
+  margin: 0;
+  border-radius: 10px;
+}
+
+/* When a card is a direct grid child, fill the row height so neighbouring
+   cards line up top and bottom. */
+.grid > ion-card,
+.grid-two > ion-card,
+.grid-admin > ion-card,
+.grid-cards > ion-card,
+.grid > app-milestone-list,
+.grid-two > app-milestone-list {
+  height: 100%;
+}
+
+ion-card-content {
+  padding: var(--card-padding);
+}
+
+/* Equalize card header spacing. */
+ion-card-header {
+  padding: var(--card-padding) var(--card-padding) 0;
+}
+
+/* ---- Global overflow / wrapping safeguards ---- */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Long words/URLs (e.g. video source URLs) must wrap, not push layout wide. */
+.subtitle,
+ion-label,
+p {
+  overflow-wrap: anywhere;
+}
+
+/* ---- Mobile (phones) ---- */
+@media (max-width: 575px) {
+  h1 {
+    font-size: 20px;
+  }
+
+  h2 {
+    font-size: 17px;
+  }
+
+  /* Any multi-column grid collapses to a single column on phones. */
+  .grid-two,
+  .grid-admin,
+  .quiz-admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Tighter card padding to reclaim horizontal space. */
+  ion-card-content {
+    padding: var(--space-sm) var(--space-md);
+  }
+}
+
+
+/* =====================================================================
+   Motion & visual polish
+   Animations use transform/opacity only (cheap on phones) and are all
+   switched off by the prefers-reduced-motion block at the bottom.
+   ===================================================================== */
+
+/* Type scale: use these tokens instead of ad-hoc pixel sizes. */
+:root {
+  --fs-xs: 12px; /* captions, badges, field errors */
+  --fs-sm: 13px; /* secondary text, labels */
+  --fs-md: 14px; /* body / supporting copy */
+  --fs-lg: 16px; /* card titles, list headings */
+  --fs-xl: 18px; /* app bar, small headings */
+  --fs-2xl: 22px; /* hero / section titles */
+  --fs-3xl: 24px; /* page titles (h1) */
+  --fs-stat: 36px; /* big numbers */
+}
+
+:root {
+  --lnd-gradient: linear-gradient(90deg, #0f6b52 0%, #1e8a4f 55%, #4caf6d 100%);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --dur-fast: 0.18s;
+  --dur-med: 0.4s;
+  --dur-slow: 0.7s;
+
+  --radius-card: 14px;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
+  --shadow-md: 0 4px 12px rgba(16, 24, 40, 0.1);
+  --shadow-lg: 0 12px 28px rgba(16, 24, 40, 0.16);
+}
+
+@keyframes lnd-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes lnd-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lnd-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes lnd-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes lnd-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes lnd-sheen {
+  0%,
+  55% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes lnd-pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 20px rgba(21, 128, 61, 0);
+  }
+}
+
+@keyframes lnd-shake {
+  10%,
+  90% {
+    transform: translateX(-1px);
+  }
+  20%,
+  80% {
+    transform: translateX(2px);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translateX(-4px);
+  }
+  40%,
+  60% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes lnd-orb {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(34px, -26px) scale(1.12);
+  }
+}
+
+/* Every route change: the incoming page fades up. The routed component is
+   inserted right after <router-outlet>, so a sibling selector reaches it. */
+.page-container > router-outlet + * {
+  display: block;
+  animation: lnd-fade-up var(--dur-med) var(--ease-out) backwards;
+}
+
+/* Staggered entrance for grids and lists: add class "stagger" to the parent.
+   'backwards' fill keeps hover transforms working once the animation ends. */
+.stagger > * {
+  animation: lnd-fade-up var(--dur-med) var(--ease-out) backwards;
+}
+
+@for $i from 1 through 12 {
+  .stagger > *:nth-child(#{$i}) {
+    animation-delay: #{($i - 1) * 55}ms;
+  }
+}
+
+.stagger > *:nth-child(n + 13) {
+  animation-delay: 660ms;
+}
+
+/* Page titles get a short gradient accent that draws in. */
+.page-container h1::after {
+  content: '';
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin-top: 6px;
+  border-radius: 3px;
+  background: var(--lnd-gradient);
+  transform-origin: left;
+  animation: lnd-grow 0.6s var(--ease-out) 0.15s backwards;
+}
+
+/* Cards: softer corners and shadow, and a smooth lift on interactive ones. */
+ion-card {
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  ion-card[button]:hover,
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+}
+
+ion-card[button]:active,
+.lift:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+/* Buttons: springy press feedback; default (primary) buttons get a gradient. */
+ion-button {
+  transition: transform var(--dur-fast) var(--ease-spring);
+}
+
+ion-button:active {
+  transform: scale(0.96);
+}
+
+ion-button:not([fill='clear']):not([fill='outline']):not([color]) {
+  --background: linear-gradient(135deg, #1e8a4f 0%, #15803d 100%);
+  --box-shadow: 0 4px 10px rgba(21, 128, 61, 0.28);
+}
+
+@media (hover: hover) {
+  ion-button:not([disabled]):hover {
+    filter: brightness(1.06);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--ion-color-secondary);
+  outline-offset: 2px;
+}
+
+/* ---- Respect the user's "reduce motion" setting ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-delay: 0ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* =====================================================================
+   Modern app polish (applies to every page)
+   ===================================================================== */
+
+/* Page titles: gradient text (solid green fallback stays for old browsers). */
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+  .page-container h1 {
+    background: linear-gradient(90deg, #0f6b52 0%, #1e8a4f 60%, #4caf6d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    width: fit-content;
+    max-width: 100%;
+  }
+}
+
+/* Anything placed straight on a page (cards, headings, notes) fades up. */
+.page-container > router-outlet + * > ion-card,
+.page-container > router-outlet + * > h2,
+.page-container > router-outlet + * > .muted,
+.page-container > router-outlet + * > .catalogue-controls,
+.page-container > router-outlet + * > ion-segment,
+.page-container > router-outlet + * > ion-accordion-group {
+  animation: lnd-fade-up var(--dur-med) var(--ease-out) 0.08s backwards;
+}
+
+/* Cards: subtle top highlight and a green glow on hover for clickable ones. */
+ion-card {
+  border: 1px solid rgba(21, 128, 61, 0.08);
+  background: #fff;
+}
+
+ion-card-title {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+@media (hover: hover) {
+  ion-card:not([button]):not(.snapshot-card):hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  ion-card[button]:hover,
+  .lift:hover {
+    border-color: rgba(21, 128, 61, 0.35);
+  }
+}
+
+/* List rows: green tint on hover, a nudge to the right, and icon badges. */
+.page-container ion-item {
+  --transition: background 0.2s var(--ease-out);
+}
+
+.page-container ion-item[button] {
+  --background-hover: rgba(21, 128, 61, 0.07);
+  --background-hover-opacity: 1;
+  --background-activated: rgba(21, 128, 61, 0.12);
+  --background-activated-opacity: 1;
+  --ripple-color: rgba(21, 128, 61, 0.25);
+  border-radius: 10px;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .page-container ion-item[button]:hover {
+    transform: translateX(4px);
+  }
+}
+
+.page-container ion-item > ion-icon[slot='start'] {
+  box-sizing: content-box;
+  font-size: 20px;
+  padding: 9px;
+  border-radius: 12px;
+  color: var(--ion-color-primary, #15803d);
+  background: #e8f3ec;
+  margin-inline-end: 14px;
+  transition: transform var(--dur-med) var(--ease-spring);
+}
+
+@media (hover: hover) {
+  .page-container ion-item:hover > ion-icon[slot='start'] {
+    transform: scale(1.1) rotate(-5deg);
+  }
+}
+
+.page-container ion-item h3 {
+  font-size: var(--fs-lg);
+  font-weight: 600;
+}
+
+.page-container ion-item p {
+  font-size: var(--fs-sm);
+}
+
+/* Segment control (My learning): pill track with a floating white thumb. */
+ion-segment {
+  --background: #e4efe8;
+  padding: 4px;
+  border-radius: 14px;
+  margin-bottom: var(--space-md);
+}
+
+ion-segment-button {
+  --color: #4b5d54;
+  --color-checked: #0f6b52;
+  --indicator-color: #fff;
+  --indicator-box-shadow: 0 2px 8px rgba(16, 24, 40, 0.15);
+  --border-radius: 10px;
+  --indicator-transition: transform 0.35s var(--ease-spring);
+  font-weight: 600;
+  text-transform: none;
+}
+
+/* Search bar and form fields: rounded with a green focus glow. */
+ion-searchbar {
+  --border-radius: 12px;
+  --box-shadow: var(--shadow-sm);
+  --icon-color: var(--ion-color-primary, #15803d);
+  padding-inline: 0;
+}
+
+ion-input,
+ion-textarea,
+ion-select {
+  transition: box-shadow var(--dur-fast) var(--ease-out);
+}
+
+ion-item:focus-within {
+  --highlight-color-focused: #1e8a4f;
+}
+
+ion-item.item-has-focus,
+ion-item:focus-within {
+  box-shadow: 0 0 0 3px rgba(30, 138, 79, 0.15);
+  border-radius: 10px;
+}
+
+/* Accordion (reports): rounded rows that glide open. */
+ion-accordion-group ion-accordion {
+  border-radius: 12px;
+  margin-bottom: var(--space-sm);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+ion-accordion-group ion-accordion ion-item[slot='header'] {
+  --background-hover: rgba(21, 128, 61, 0.07);
+  --background-hover-opacity: 1;
+}
+
+ion-accordion.accordion-expanding,
+ion-accordion.accordion-expanded {
+  box-shadow: var(--shadow-md);
+}
+
+/* Toasts and popovers get softer shapes. */
+ion-toast {
+  --border-radius: 14px;
+  --box-shadow: var(--shadow-lg);
+}
+
+ion-popover {
+  --box-shadow: var(--shadow-lg);
+  --backdrop-opacity: 0.12;
+}
+
+/* Skeleton placeholders: add class "skeleton" to a block while loading. */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  height: 56px;
+  margin-bottom: var(--space-sm);
+  border-radius: 12px;
+  background: #e8efea;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.7) 50%, transparent 80%);
+    transform: translateX(-100%);
+    animation: lnd-skeleton 1.3s ease-in-out infinite;
+  }
+}
+
+@keyframes lnd-skeleton {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Thin, themed scrollbars on desktop. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9cc5ad transparent;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9cc5ad;
+  border-radius: 8px;
+}
+
+/* Loading / muted notes. */
+.muted {
+  color: var(--ion-color-medium, #777);
+  font-size: var(--fs-md);
+}
+
+/* Tabular rows (reports): zebra + hover. */
+.report-row {
+  transition: background var(--dur-fast) var(--ease-out);
+  border-radius: 8px;
+}
+
+@media (hover: hover) {
+  .report-row:hover {
+    background: rgba(21, 128, 61, 0.07);
+  }
+}
+
+/* Header title links to the dashboard but keeps the plain title look. */
+.title-link {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+
+@media (hover: hover) {
+  .title-link:hover {
+    opacity: 0.85;
+  }
+}
+
+/* ---- Typography weights & spacing rhythm ---- */
+ion-card-title {
+  color: var(--ion-text-color, #1f2937);
+  line-height: 1.3;
+}
+
+/* Lists inside cards sit on the card, not on a grey list background. */
+ion-card ion-list {
+  background: transparent;
+  padding: 0;
+}
+
+ion-card-header + ion-card-content {
+  padding-top: var(--space-md);
+}
+
+/* Headings 600, supporting text 400. */
+.page-container h1,
+.page-container h2,
+.page-container h3 {
+  font-weight: 600;
+}
+
+.page-container p,
+.page-container ion-label p {
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.page-container ion-item {
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+}

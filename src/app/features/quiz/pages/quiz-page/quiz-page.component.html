@@ -1,0 +1,53 @@
+<ng-container *ngIf="quiz; else notFound">
+  <h1>{{ quiz.title }}</h1>
+  <p class="subtitle">Pass mark: {{ quiz.passMarkPercent }}%</p>
+
+  <ng-container *ngIf="!result">
+    <ion-card class="question-card" *ngFor="let q of quiz.questions; let i = index">
+      <ion-card-content>
+        <div class="prompt">{{ i + 1 }}. {{ q.prompt }}</div>
+        <ion-radio-group
+          [value]="answers[q.id]"
+          (ionChange)="selectAnswer(q.id, $event.detail.value)"
+        >
+          <ion-item lines="none" *ngFor="let opt of q.options">
+            <ion-radio slot="start" [value]="opt.id"></ion-radio>
+            <ion-label>{{ opt.label }}</ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </ion-card-content>
+    </ion-card>
+
+    <p class="validation" *ngIf="validationMessage">{{ validationMessage }}</p>
+
+    <ion-button expand="block" (click)="submit()" [disabled]="submitting">
+      {{ submitting ? 'Submitting...' : 'Submit quiz' }}
+    </ion-button>
+  </ng-container>
+
+  <ion-card
+    *ngIf="result"
+    class="result-card"
+    [class.passed]="result.passed"
+    [class.failed]="!result.passed"
+  >
+    <ion-card-content>
+      <div class="score">{{ result.scorePercent }}%</div>
+      <h2>{{ result.passed ? 'Passed' : 'Not passed' }}</h2>
+      <p>
+        {{ result.correctCount }} of {{ result.totalCount }} correct.
+        Pass mark {{ quiz.passMarkPercent }}%.
+      </p>
+      <div class="actions">
+        <ion-button (click)="retry()">Try again</ion-button>
+        <ion-button fill="outline" routerLink="/my-learning">
+          Back to My Learning
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ng-container>
+
+<ng-template #notFound>
+  <app-empty-state icon="alert-circle-outline" message="Quiz not found."></app-empty-state>
+</ng-template>

@@ -1,0 +1,54 @@
+<h1>Feedback</h1>
+<p class="subtitle">{{ targetTitle }}</p>
+
+<ion-card class="feedback-form">
+  <ion-card-content>
+    <label class="field-label">Your rating</label>
+    <app-rating-stars
+      [rating]="rating"
+      (ratingChange)="rating = $event"
+    ></app-rating-stars>
+
+    <ion-item class="comment-field" lines="full">
+      <ion-textarea
+        label="Comment (optional)"
+        labelPlacement="stacked"
+        [rows]="3"
+        [(ngModel)]="comment"
+        placeholder="What did you think?"
+      ></ion-textarea>
+    </ion-item>
+
+    <ion-button (click)="submit()" [disabled]="submitting">Submit feedback</ion-button>
+  </ion-card-content>
+</ion-card>
+
+<ion-card class="feedback-list">
+  <ion-card-header>
+    <ion-card-title>Collected feedback</ion-card-title>
+    <ion-card-subtitle *ngIf="existing.length > 0">
+      Average rating: {{ average }} / 5 ({{ existing.length }})
+    </ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <ion-list lines="full" *ngIf="existing.length > 0; else noFeedback">
+      <ion-item *ngFor="let f of existing">
+        <app-rating-stars
+          slot="start"
+          [rating]="f.rating"
+          [readonly]="true"
+        ></app-rating-stars>
+        <ion-label class="ion-text-wrap">
+          <h3>{{ f.comment || '(no comment)' }}</h3>
+          <p>{{ f.createdAt | date: 'short' }}</p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    <ng-template #noFeedback>
+      <app-empty-state
+        icon="chatbox-ellipses-outline"
+        message="No feedback yet. Be the first!"
+      ></app-empty-state>
+    </ng-template>
+  </ion-card-content>
+</ion-card>

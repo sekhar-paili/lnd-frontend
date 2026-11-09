@@ -1,0 +1,164 @@
+<h1>Quiz Builder</h1>
+
+<div class="quiz-admin-grid">
+  <ion-card class="builder-card">
+    <ion-card-header>
+      <ion-card-title>{{ editingId ? 'Edit quiz' : 'New quiz' }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form class="quiz-form" [formGroup]="form" (ngSubmit)="save()">
+        <ion-item>
+          <ion-input
+            label="Quiz title"
+            labelPlacement="stacked"
+            formControlName="title"
+          ></ion-input>
+        </ion-item>
+        <div class="field-error" *ngIf="form.controls.title.touched && form.controls.title.invalid">
+          Title is required (min 2 chars).
+        </div>
+
+        <ion-item class="pass-mark">
+          <ion-input
+            label="Pass mark (%)"
+            labelPlacement="stacked"
+            type="number"
+            formControlName="passMarkPercent"
+          ></ion-input>
+        </ion-item>
+        <div class="field-error" *ngIf="form.controls.passMarkPercent.touched && form.controls.passMarkPercent.invalid">
+          Enter a value between 0 and 100.
+        </div>
+
+        <div
+          class="question"
+          *ngFor="let question of questions.controls; let qi = index"
+          [formGroup]="question"
+        >
+          <div class="question-head">
+            <strong>Question {{ qi + 1 }}</strong>
+            <ion-button
+              fill="clear"
+              color="danger"
+              type="button"
+              (click)="removeQuestion(qi)"
+              aria-label="Remove question"
+            >
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </div>
+
+          <ion-item>
+            <ion-select
+              label="Type"
+              labelPlacement="stacked"
+              interface="popover"
+              formControlName="type"
+              (ionChange)="onTypeChange(question, $event.detail.value)"
+            >
+              <ion-select-option [value]="QuestionType.MultipleChoice">Multiple choice</ion-select-option>
+              <ion-select-option [value]="QuestionType.TrueFalse">True / False</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Prompt"
+              labelPlacement="stacked"
+              formControlName="prompt"
+            ></ion-input>
+          </ion-item>
+          <div class="field-error" *ngIf="question.get('prompt')?.touched && question.get('prompt')?.invalid">
+            Prompt is required.
+          </div>
+
+          <label class="field-label">Options (pick the correct one)</label>
+          <ion-radio-group formControlName="correctOptionId">
+            <div
+              class="option-row"
+              *ngFor="let option of options(question).controls; let oi = index"
+              [formGroup]="option"
+            >
+              <ion-radio [value]="option.get('id')!.value" aria-label="Correct option"></ion-radio>
+              <ion-input
+                class="option-field"
+                [label]="'Option ' + (oi + 1)"
+                labelPlacement="stacked"
+                formControlName="label"
+                [readonly]="isTrueFalse(question)"
+              ></ion-input>
+              <ion-button
+                fill="clear"
+                type="button"
+                *ngIf="!isTrueFalse(question)"
+                (click)="removeOption(question, oi)"
+                aria-label="Remove option"
+              >
+                <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-radio-group>
+          <div
+            class="field-error"
+            *ngIf="question.get('correctOptionId')?.invalid && question.get('correctOptionId')?.touched"
+          >
+            Select the correct option.
+          </div>
+
+          <ion-button
+            fill="outline"
+            size="small"
+            type="button"
+            *ngIf="!isTrueFalse(question)"
+            (click)="addOption(question)"
+          >
+            <ion-icon slot="start" name="add-outline"></ion-icon> Add option
+          </ion-button>
+
+          <div class="divider"></div>
+        </div>
+
+        <div class="form-actions">
+          <ion-button fill="outline" type="button" (click)="addQuestion()">
+            <ion-icon slot="start" name="add-outline"></ion-icon> Add question
+          </ion-button>
+          <span class="spacer"></span>
+          <ion-button fill="clear" type="button" *ngIf="editingId" (click)="cancel()">
+            Cancel
+          </ion-button>
+          <ion-button type="submit" [disabled]="saving">
+            {{ editingId ? 'Update quiz' : 'Create quiz' }}
+          </ion-button>
+        </div>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Quizzes</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ng-container *ngIf="quizzes$ | async as quizzes">
+        <ion-list lines="full" *ngIf="quizzes.length > 0; else none">
+          <ion-item class="quiz-row" *ngFor="let q of quizzes">
+            <ion-icon slot="start" name="help-circle-outline"></ion-icon>
+            <ion-label>
+              <h3>{{ q.title }}</h3>
+              <p>{{ q.questions.length }} questions · pass {{ q.passMarkPercent }}%</p>
+            </ion-label>
+            <ion-button slot="end" fill="clear" (click)="edit(q)" aria-label="Edit">
+              <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+            </ion-button>
+            <ion-button slot="end" fill="clear" color="danger" (click)="remove(q)" aria-label="Delete">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </ion-item>
+        </ion-list>
+        <ng-template #none>
+          <app-empty-state icon="help-circle-outline" message="No quizzes yet."></app-empty-state>
+        </ng-template>
+      </ng-container>
+    </ion-card-content>
+  </ion-card>
+</div>

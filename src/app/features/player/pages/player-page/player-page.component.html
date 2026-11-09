@@ -1,0 +1,45 @@
+<ng-container *ngIf="video; else notFound">
+  <div class="player-header">
+    <ion-button fill="clear" routerLink="/catalogue">
+      <ion-icon slot="start" name="arrow-back-outline"></ion-icon> Catalogue
+    </ion-button>
+    <app-status-badge
+      *ngIf="completed"
+      label="completed"
+      tone="success"
+    ></app-status-badge>
+  </div>
+
+  <h1>{{ video.title }}</h1>
+
+  <video
+    #videoEl
+    class="player"
+    controls
+    [src]="video.sourceUrl"
+    (loadedmetadata)="onMetadataLoaded()"
+    (timeupdate)="onTimeUpdate()"
+    (ended)="onEnded()"
+  ></video>
+
+  <div class="progress">
+    <ion-progress-bar [value]="percentComplete / 100"></ion-progress-bar>
+    <span class="progress-label">{{ percentComplete | percentComplete }} watched</span>
+  </div>
+
+  <p class="desc">{{ video.description }}</p>
+
+  <ion-button
+    fill="outline"
+    [routerLink]="['/feedback', 'VIDEO', video.id]"
+  >
+    <ion-icon slot="start" name="chatbox-ellipses-outline"></ion-icon> Leave feedback
+  </ion-button>
+</ng-container>
+
+<ng-template #notFound>
+  <app-empty-state
+    icon="alert-circle-outline"
+    message="Video not found."
+  ></app-empty-state>
+</ng-template>

@@ -1,0 +1,36 @@
+<ng-container *ngIf="path; else notFound">
+  <ion-button fill="clear" routerLink="/learning-paths">
+    <ion-icon slot="start" name="arrow-back-outline"></ion-icon> Learning Paths
+  </ion-button>
+  <h1>{{ path.title }}</h1>
+  <p class="desc">{{ path.description }}</p>
+
+  <ion-card class="steps-card">
+    <ion-list lines="full">
+      <ion-item
+        *ngFor="let step of steps"
+        class="step"
+        [class.locked]="step.state === StepState.Locked"
+        [button]="step.state !== StepState.Locked"
+        [disabled]="step.state === StepState.Locked"
+        (click)="open(step)"
+      >
+        <ion-icon slot="start" [name]="icon(step.state)"></ion-icon>
+        <ion-label>{{ step.title }}</ion-label>
+        <app-status-badge
+          slot="end"
+          [label]="step.state.toLowerCase()"
+          [tone]="tone(step.state)"
+        ></app-status-badge>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <p class="hint">
+    Pass each assessment to unlock the next step. Progress updates when you return here.
+  </p>
+</ng-container>
+
+<ng-template #notFound>
+  <app-empty-state icon="alert-circle-outline" message="Path not found."></app-empty-state>
+</ng-template>

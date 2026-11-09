@@ -1,0 +1,16 @@
+.video-form {
+  display: flex;
+  flex-direction: column;
+
+  .form-actions {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+}
+
+.field-error {
+  color: var(--ion-color-danger);
+  font-size: 12px;
+  margin: 2px 0 var(--space-sm) var(--space-md);
+}
